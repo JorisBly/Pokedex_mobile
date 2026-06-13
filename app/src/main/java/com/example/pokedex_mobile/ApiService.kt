@@ -9,7 +9,7 @@ interface ApiService {
     @GET("api/v1/pokemon")
     suspend fun getAll(): List<Pokemon>
 
-    @GET("pokemon/{id}")
+    @GET("api/v1/pokemon/{id}")
     suspend fun getPokemon(@Path("id") id: String): Pokemon?
 }
 
