@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +35,10 @@ class MainActivity : AppCompatActivity() {
         pokemonAdapter = PokemonAdapter(filteredPokemons)
         binding.recyclerview.adapter = pokemonAdapter
 
+        styleAllButton()
+        generateTypeChips()
+        addListenerToSearchBar()
+
         startMainScreen()
     }
 
@@ -42,15 +48,25 @@ class MainActivity : AppCompatActivity() {
                     val pokemons = TyradexClient.api.getAll()
                     pokemonList.addAll(pokemons)
                     updateMainScreen()
-                    styleAllButton()
-                    generateTypeChips()
-                    addListenerToSearchBar()
+                    if(binding.layoutError.visibility == View.VISIBLE){
+                        binding.layoutError.visibility = View.GONE
+                        binding.recyclerview.visibility = View.VISIBLE
+                    }
 
                 } catch (e: Exception) {
+                    Toast.makeText(this@MainActivity,
+                        "Problème de réseaux veuillez réessayez",
+                        Toast.LENGTH_SHORT).show()
+                    binding.recyclerview.visibility = View.GONE
+                    binding.layoutError.visibility = View.VISIBLE
+                    binding.btnRetry.setOnClickListener {
+                        startMainScreen()
+                    }
                     e.printStackTrace()
                 }
             }
     }
+
 
     private fun updateMainScreen(){
         filteredPokemons.clear()
@@ -67,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     private fun generateTypeChips() {
         for (elementType in ElementsColors.values()) {
 
-            val chip = Chip(this, null, com.google.android.material.R.attr.chipStyle).apply {
+            val chip = Chip(this, null).apply {
                 text = elementType.name
                 isCheckable = true
                 chipCornerRadius = dpToPx()
@@ -75,8 +91,8 @@ class MainActivity : AppCompatActivity() {
 
                 val backgroundStates = ColorStateList(
                     arrayOf(
-                        intArrayOf(android.R.attr.state_checked),
-                        intArrayOf(-android.R.attr.state_checked)
+                        intArrayOf(R.attr.state_checked),
+                        intArrayOf(-R.attr.state_checked)
                     ),
                     intArrayOf(
                         Color.parseColor("#E3350D"),
@@ -86,8 +102,8 @@ class MainActivity : AppCompatActivity() {
 
                 val textStates = ColorStateList(
                     arrayOf(
-                        intArrayOf(android.R.attr.state_checked),
-                        intArrayOf(-android.R.attr.state_checked)
+                        intArrayOf(R.attr.state_checked),
+                        intArrayOf(-R.attr.state_checked)
                     ),
                     intArrayOf(
                         Color.WHITE,
