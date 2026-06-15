@@ -21,6 +21,10 @@ class PokemonDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadPokemon(pokemonId.toString())
+
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun loadPokemon(pokemonId: String) {
@@ -48,7 +52,6 @@ class PokemonDetailsActivity : AppCompatActivity() {
                     .load(pokemon?.sprites?.regular)
                     .into(binding.ivDetailSprite)
 
-                binding.cardImage.setBackgroundColor(ElementsColors.valueOf(firstType).rgb)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
