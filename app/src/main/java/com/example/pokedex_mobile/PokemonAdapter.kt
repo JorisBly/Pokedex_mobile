@@ -2,6 +2,7 @@ package com.example.pokedex_mobile
 
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.ContextCompat.startActivity
@@ -34,7 +35,10 @@ class PokemonAdapter(private val pokemonList: List<Pokemon>) : RecyclerView.Adap
                         var bindedType = binding.tvType1
                         if(index > 0){
                             bindedType = binding.tvType2
-                            }
+                            binding.tvType2.visibility = View.VISIBLE
+                            }else{
+                                binding.tvType2.visibility = View.GONE
+                        }
                         bindedType.text = value.name
                         bindedType.setBackgroundColor(
                             ElementsColors.valueOf(value.name).rgb
